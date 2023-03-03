@@ -1,12 +1,5 @@
 export enum Laser {
-  Gold,
-  Coral,
-  Rust,
-  Ruby,
-  Rose,
-  Jade,
-  Emerald,
-  Violet,
+  OrdinalsCircle
 }
 
 export interface LaserMeta {

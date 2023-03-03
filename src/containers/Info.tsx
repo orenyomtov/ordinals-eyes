@@ -42,12 +42,12 @@ const Info: React.FC<Props> = ({ onDrop }: Props) => {
   return (
     <Wrapper>
       <Title>
-        Laser <br />
+        Ordinals <br />
         Yourself
       </Title>
       <Text>
-        Are you a true brrrrliever? <br />
-        Choose your laser eyes and tell the world!
+        Bullish on Ordinals? <br />
+        Tell the world!
       </Text>
 
       <Button {...getRootProps()}>

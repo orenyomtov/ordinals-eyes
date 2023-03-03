@@ -25,6 +25,10 @@ const renderIconKey = (iconKey: string) => {
       return "\\e903"
     case "github":
       return "\\f09b"
+    case "plus":
+      return "+"
+    case "minus":
+      return "-"
     default:
       return ""
   }

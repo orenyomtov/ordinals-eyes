@@ -43,6 +43,7 @@ const Logo = styled.div`
 
     img {
       width: 16px;
+      height: 16px;
     }
   }
 `
@@ -54,8 +55,8 @@ const Header: React.FC<Props> = () => {
         <Row middle="xs" center="xs" between="sm">
           <Col>
             <Logo>
-              <img src="images/logo.svg" alt="" />
-              crypto<span>lasereyes</span>
+              <img src="images/logo.png" alt="" width="36" height="36" />
+              ordinals<span>eyes</span>
             </Logo>
           </Col>
 

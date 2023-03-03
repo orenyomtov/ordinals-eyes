@@ -67,6 +67,7 @@ export const detect = async () => {
   return {
     left,
     right,
+    size: LASER_SIZE,
   }
 }
 

@@ -2,7 +2,6 @@ import React, { useRef, useEffect } from "react"
 import { values, isNil } from "ramda"
 import { Stage, Layer } from "react-konva"
 import { rem } from "polished"
-import { IPoint } from "face-api.js"
 import styled from "styled-components"
 
 import { models, detect, download } from "../helpers/utils"
@@ -124,14 +123,22 @@ const Actions = styled.div`
 const ButtonGroup = styled.div`
   ${Button} {
     padding: ${rem(10)} ${rem(12)};
+    border-radius: 0;
+    border-left: 1px solid ${(props) => props.theme.colors.dark};
 
     &:first-child {
       border-radius: ${rem(16)} 0 0 ${rem(16)};
+      border-left: none;
+      i {
+        font-weight: normal;
+      }
     }
 
     &:last-child {
       border-radius: 0 ${rem(16)} ${rem(16)} 0;
-      border-left: 1px solid ${(props) => props.theme.colors.dark};
+      i {
+        font-weight: normal;
+      }
     }
 
     &:hover {
@@ -143,6 +150,7 @@ const ButtonGroup = styled.div`
     }
 
     i {
+      font-weight: bold;
       font-size: ${rem(24)};
       margin-right: 0;
       margin-left: 0;
@@ -168,10 +176,11 @@ const ButtonGroup = styled.div`
   }
 `
 
-const Sandbox: React.FC<Props> = ({ laser = Laser.Gold, portrait }: Props) => {
-  const [state, setState] = useSetState<{ [key: string]: IPoint | undefined }>({
-    left: { x: 236, y: 31.81867850138373 },
-    right: { x: 270, y: 30.816437664763399 },
+const Sandbox: React.FC<Props> = ({ laser = Laser.OrdinalsCircle, portrait }: Props) => {
+  const [state, setState] = useSetState<{ [key: string]: any | undefined }>({
+    left: { x: 260, y: 150 },
+    right: { x: 325, y: 165 },
+    size: LASER_SIZE,
   })
 
   const stageRef = useRef(null)
@@ -201,10 +210,36 @@ const Sandbox: React.FC<Props> = ({ laser = Laser.Gold, portrait }: Props) => {
       stageRef.current.toImage({
         pixelRatio: 3,
         callback(img: any) {
-          download(img.src, "crypto-laser-eyes.png")
+          download(img.src, "ordinals-eyes.png")
         },
       })
     }
+  }
+
+  const changeSize = async (difference: number) => {
+    const currentSize = state?.size
+    const newSize = currentSize + difference
+    const left = {
+      x: state?.left.x - difference / 2,
+      y: state?.left.y - difference / 2,
+    }
+    const right = {
+      x: state?.right.x - difference / 2,
+      y: state?.right.y - difference / 2,
+    }
+    setState({
+      left,
+      right,
+      size: newSize,
+    })
+  }
+
+  const onBigger = async () => {
+    changeSize(5)
+  }
+
+  const onSmaller = async () => {
+    changeSize(-5)
   }
 
   return (
@@ -215,9 +250,12 @@ const Sandbox: React.FC<Props> = ({ laser = Laser.Gold, portrait }: Props) => {
             <Figure scaled src={portrait || "images/default.jpg"} />
 
             {lasers.map((laser) => {
-              if (isNil(laser)) {
+              if (isNil(laser) || typeof laser != 'object') {
                 return null
               }
+              console.log("lasers[lasers.length - 1]", lasers[lasers.length - 1])
+              console.log("lasers", lasers)
+              console.log("LASER_SIZE", LASER_SIZE)
               return (
                 <Figure
                   draggable
@@ -225,8 +263,8 @@ const Sandbox: React.FC<Props> = ({ laser = Laser.Gold, portrait }: Props) => {
                   key={laser?.x}
                   x={laser?.x}
                   y={laser?.y}
-                  width={LASER_SIZE}
-                  height={LASER_SIZE}
+                  width={lasers[lasers.length - 1]}
+                  height={lasers[lasers.length - 1]}
                 />
               )
             })}
@@ -236,14 +274,17 @@ const Sandbox: React.FC<Props> = ({ laser = Laser.Gold, portrait }: Props) => {
         {portrait ? (
           <Actions>
             <ButtonGroup>
-              <Button
-                as="a"
-                target="_blank"
-                rel="noreferrer"
-                href="https://twitter.com/intent/tweet?text=Join%20the%20revolution.%20Be%20part%20of%20the%20laser%20eye%20family%20and%20update%20your%20profile%20picture%20today!&url=https%3A%2F%2Fcryptolasereyes.com&hashtags=LaserRayUntil100K"
-              >
+              <Button type="button" onClick={() => {window.open("https://twitter.com/intent/tweet?text=Join%20the%20revolution.%20Be%20part%20of%20the%20ordinals%20eyes%20family%20and%20update%20your%20profile%20picture%20today!&url=https%3A%2F%2Fordinalseyes.com&hashtags=#ordinals", "_blank")}}>
                 <SvgIcon iconKey="share" />
                 <span>Share</span>
+              </Button>
+              <Button type="button" onClick={onBigger}>
+                <SvgIcon iconKey="plus" />
+                <span>Bigger</span>
+              </Button>
+              <Button type="button" onClick={onSmaller}>
+                <SvgIcon iconKey="minus" />
+                <span>Smaller</span>
               </Button>
               <Button type="button" onClick={onExport}>
                 <SvgIcon iconKey="download" />

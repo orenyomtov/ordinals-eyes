@@ -7,7 +7,6 @@ import { Layout } from "../layouts/"
 
 import Header from "../containers/Header"
 import Footer from "../containers/Footer"
-import Lasers from "../containers/Lasers"
 import Playground from "../containers/Playground"
 import Main from "../components/Main"
 
@@ -21,15 +20,9 @@ interface State {
 
 const App: React.FC = () => {
   const [state, setState] = useSetState<State>({
-    laser: Laser.Gold,
+    laser: Laser.OrdinalsCircle,
     portrait: undefined,
   })
-
-  const onClick = (laser: Laser): void => {
-    setState({
-      laser,
-    })
-  }
 
   const onDrop = ([file]: File[]): void => {
     setState({
@@ -42,7 +35,6 @@ const App: React.FC = () => {
       <Main>
         <Header />
         <Playground laser={state.laser} portrait={state.portrait} onDrop={onDrop} />
-        <Lasers activeLaser={state.laser} onClick={onClick} />
         <Footer />
       </Main>
     </Layout>
